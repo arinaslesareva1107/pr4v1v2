@@ -1,0 +1,53 @@
+filename = input("Введите имя файла: ")
+try:
+    try:
+        with open(filename, 'r', encoding='utf-8') as file:
+            print(f"\nФайл '{filename}' открыт!")
+            print("Текущее содержимое файла:")
+            content = file.read()
+            if content:
+                print(content)
+            else:
+                print("(файл пуст)")
+    except FileNotFoundError:
+        print(f"\nФайл '{filename}' не найден. Создаю новый файл...")
+    except UnicodeDecodeError:
+        print(f"Ошибка: проблемы с кодировкой файла '{filename}'")
+        exit()
+    except PermissionError:
+        print(f"Ошибка: нет прав доступа к файлу '{filename}'")
+        exit()
+    
+    print("\n--- Добавление строк в файл ---")
+    print("Введите строки для добавления. Для выхода введите 'выход'")
+    
+    while True:
+        line = input("\nВведите строку: ")
+        
+        if line.lower() == 'выход':
+            print("Программа завершена.")
+            break
+        
+        try:
+            with open(filename, 'a', encoding='utf-8') as file:
+                file.write(line + '\n')
+            
+            print(f"Строка добавлена в файл '{filename}'")
+            
+            print("\nТекущее содержимое файла:")
+            with open(filename, 'r', encoding='utf-8') as file:
+                content = file.read()
+                if content:
+                    print(content)
+                else:
+                    print("(файл пуст)")
+                    
+        except PermissionError:
+            print(f"Ошибка: нет прав для записи в файл '{filename}'")
+            break
+        except UnicodeEncodeError:
+            print("Ошибка: проблемы с кодировкой при записи")
+            break
+            
+except Exception as e:
+    print(f"Произошла непредвиденная ошибка: {e}")
